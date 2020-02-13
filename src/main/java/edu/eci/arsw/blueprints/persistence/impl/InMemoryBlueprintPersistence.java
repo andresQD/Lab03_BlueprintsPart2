@@ -65,7 +65,7 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
     public ArrayList<Blueprint> getBlueprintsByAuthor(String author) throws BlueprintNotFoundException {
         ArrayList<Blueprint> newsBluePrints = new ArrayList<Blueprint>();
         for (Blueprint bp : blueprints.values()) {
-            if (bp.getAuthor() == author) {
+            if (bp.getAuthor().equals(author)) {
                 newsBluePrints.add(bp);
             }
         }

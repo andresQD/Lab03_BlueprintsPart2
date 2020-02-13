@@ -19,13 +19,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  *
  * @author hcadavid
  */
-@Service
+@Component("bpservice")
 public class BlueprintsServices {
 
     @Autowired
@@ -46,7 +47,7 @@ public class BlueprintsServices {
 
     }
 
-    public ArrayList<Blueprint> getAllBlueprints() {
+    public ArrayList<Blueprint> getAllBlueprints() throws BlueprintNotFoundException {
         try {
             return bpp.getAllBlueprints();
         } catch (BlueprintNotFoundException ex) {
