@@ -14,12 +14,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +43,7 @@ public class BlueprintAPIController {
     public ResponseEntity<ArrayList<Blueprint>> manejadorGetRecursoXX() {
         try {
             //obtener datos que se enviarán a través del API
-            ArrayList<Blueprint> data = bps.getAllBlueprints();
+
             return new ResponseEntity<ArrayList<Blueprint>>(bps.getAllBlueprints(), HttpStatus.ACCEPTED);
         } catch (BlueprintNotFoundException ex) {
             Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,7 +55,7 @@ public class BlueprintAPIController {
     public ResponseEntity<ArrayList<Blueprint>> manejadorGetRecursoAuthors(@PathVariable("author") String author) {
         try {
             //obtener datos que se enviarán a través del API
-            ArrayList<Blueprint> data = bps.getBlueprintsByAuthor(author);
+
             return new ResponseEntity((ArrayList<Blueprint>) bps.getBlueprintsByAuthor(author), HttpStatus.ACCEPTED);
         } catch (BlueprintNotFoundException e) {
             Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, e);
@@ -65,11 +67,37 @@ public class BlueprintAPIController {
     public ResponseEntity<Blueprint> manejadorGetRecursoAuthorsNombres(@PathVariable("author") String author, @PathVariable("bpname") String bpname) {
         try {
             //obtener datos que se enviarán a través del API
-            Blueprint data = bps.getBlueprint(author, bpname);
+
             return new ResponseEntity<Blueprint>(bps.getBlueprint(author, bpname), HttpStatus.ACCEPTED);
         } catch (BlueprintNotFoundException e) {
             Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, e);
             return new ResponseEntity<Blueprint>((Blueprint) null, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(path = "/crear", method = RequestMethod.POST)
+    public ResponseEntity<Blueprint> manejadorPostRecursoNuevoBlueprint(@RequestBody Blueprint bp) {
+        try {
+            //registrar dato
+            bps.addNewBlueprint(bp);
+            return new ResponseEntity<Blueprint>(HttpStatus.CREATED);
+        } catch (Exception ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<Blueprint>((Blueprint) null, HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    @RequestMapping(path = "/{author}/{bpname}", method = RequestMethod.PUT)
+    public ResponseEntity<Blueprint> manejadorPutRecursoAuthorsNombres(@PathVariable("author") String author, @PathVariable("bpname") String bpname, @RequestBody Blueprint bp) {
+        try {
+            //registrar dato
+            bps.updateBlueprint(author, bpname, bp.getPoints());
+            return new ResponseEntity<Blueprint>(HttpStatus.CREATED);
+        } catch (Exception ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<Blueprint>((Blueprint) null, HttpStatus.FORBIDDEN);
+        }
+
     }
 }

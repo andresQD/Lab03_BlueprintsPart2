@@ -13,6 +13,7 @@ import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
 import edu.eci.arsw.blueprints.persistence.Filter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -80,6 +81,12 @@ public class BlueprintsServices {
     
      public ArrayList<Point> getFilter(Blueprint bp) {
         return filt.filter(bp);
+    }
+
+    public void updateBlueprint(String author, String bpname, List<Point> pnts) throws BlueprintNotFoundException {
+        Blueprint nbp = getBlueprint(author, bpname);
+        nbp.setPoints(pnts);
+       
     }
 
 }
